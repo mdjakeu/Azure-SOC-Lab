@@ -15,9 +15,7 @@ Objectives
 - Create custom detection rules using KQL
 - Generate and investigate security incidents
 - Perform incident response workflow
-
----
-
+  
 ## Environment Setup
 
 ### 1️⃣ Log Analytics Workspace
@@ -28,21 +26,14 @@ Objectives
 - Enabled Sentinel on the Log Analytics Workspace
 - Configured SIEM dashboard and monitoring workspace
 
----
-
 ## 🔌 Data Connectors Enabled
-
 The following data connectors were configured:
-
 - Azure Activity Logs
 - Security Events (Windows VM)
 - Microsoft Defender for Cloud
 - Azure AD Sign-in Logs
 - Diagnostic Settings for Storage / Key Vault (if applicable)
-
 These connectors allowed centralized ingestion of security logs across the environment.
-
----
 
 ## 🔎 Custom Detection Rules
 
@@ -52,3 +43,14 @@ SecurityEvent
 | order by TimeGenerated
 | where EventID == 4625
 
+
+## 🔍 Detection Rule Created
+
+A custom analytic rule was created to detect excessive failed logins.
+
+### KQL Query:
+```kql
+SecurityEvent
+| where EventID == 4625
+| summarize FailedAttempts = count() by Account, IPAddress
+| where FailedAttempts > 5
